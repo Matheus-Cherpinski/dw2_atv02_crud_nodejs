@@ -1,0 +1,43 @@
+-- Script seguro para criar a estrutura do banco sem apagar dados existentes.
+-- Se o banco já estiver configurado pela Atividade 01, você não precisa executar este arquivo.
+CREATE DATABASE IF NOT EXISTS kwave
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE kwave;
+
+CREATE TABLE IF NOT EXISTS grupos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  agencia VARCHAR(100) NOT NULL,
+  anoDebut INT NOT NULL,
+  geracao VARCHAR(30) NOT NULL,
+  tipo VARCHAR(30) NOT NULL,
+  imagem VARCHAR(255) NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS integrantes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL,
+  grupoId INT NOT NULL,
+  posicao VARCHAR(100) NOT NULL,
+  nacionalidade VARCHAR(50) NOT NULL,
+  anoNascimento INT NOT NULL,
+  imagem VARCHAR(255) NULL,
+  CONSTRAINT fk_integrante_grupo
+    FOREIGN KEY (grupoId) REFERENCES grupos(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS musicas (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  titulo VARCHAR(150) NOT NULL,
+  grupoId INT NOT NULL,
+  ano INT NOT NULL,
+  album VARCHAR(150) NOT NULL,
+  tipo VARCHAR(50) NOT NULL,
+  imagem VARCHAR(255) NULL,
+  CONSTRAINT fk_musica_grupo
+    FOREIGN KEY (grupoId) REFERENCES grupos(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;

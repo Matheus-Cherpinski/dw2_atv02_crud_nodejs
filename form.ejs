@@ -1,0 +1,30 @@
+<%- include('../partials/header', { titulo }) %>
+<section class="form-wrap">
+  <a class="back-link" href="<%= entidade === 'grupo' ? '/grupos' : entidade === 'integrante' ? '/integrantes' : '/musicas' %>">← Voltar para <%= entidade === 'grupo' ? 'grupos' : entidade === 'integrante' ? 'integrantes' : 'músicas' %></a>
+  <div class="form-panel">
+    <p class="eyebrow">K-WAVE / FORMULÁRIO</p>
+    <h1><%= titulo %></h1>
+    <p class="form-intro">Preencha os dados abaixo. Os campos marcados com * são obrigatórios.</p>
+    <form action="<%= action %>" method="post" class="crud-form">
+      <% campos.forEach(campo => { %>
+        <div class="form-field <%= campo.name === 'imagem' ? 'full-width' : '' %>">
+          <label for="<%= campo.name %>"><%= campo.label %><% if (campo.required) { %> *<% } %></label>
+          <% if (campo.type === 'select') { %>
+            <select id="<%= campo.name %>" name="<%= campo.name %>" <%= campo.required ? 'required' : '' %>>
+              <option value="">Selecione um grupo</option>
+              <% grupos.forEach(grupo => { %><option value="<%= grupo.id %>" <%= Number(registro[campo.name]) === grupo.id ? 'selected' : '' %>><%= grupo.nome %></option><% }) %>
+            </select>
+          <% } else { %>
+            <input id="<%= campo.name %>" name="<%= campo.name %>" type="<%= campo.type || 'text' %>" value="<%= registro[campo.name] == null ? '' : registro[campo.name] %>" placeholder="<%= campo.placeholder || '' %>" <%= campo.min ? `min="${campo.min}"` : '' %> <%= campo.max ? `max="${campo.max}"` : '' %> <%= campo.required ? 'required' : '' %>>
+          <% } %>
+        </div>
+      <% }) %>
+      <p class="form-help full-width">Para imagens, informe apenas o caminho relativo, por exemplo <code>grupos/aespa.jpg</code>. Os arquivos devem estar dentro de <code>public/imagens/</code>.</p>
+      <div class="form-actions full-width">
+        <a class="button secondary" href="<%= entidade === 'grupo' ? '/grupos' : entidade === 'integrante' ? '/integrantes' : '/musicas' %>">Cancelar</a>
+        <button class="button primary" type="submit"><%= submitLabel %> <span aria-hidden="true">→</span></button>
+      </div>
+    </form>
+  </div>
+</section>
+<%- include('../partials/footer') %>
